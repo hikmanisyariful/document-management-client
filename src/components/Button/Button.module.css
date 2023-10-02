@@ -1,0 +1,43 @@
+.button {
+  cursor: pointer;
+  user-select: none;
+  font-family: inherit;
+  font-size: 1em;
+  padding: 1em;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+  border: none;
+  outline: none;
+}
+
+.button[data-variant="primary"] {
+  background: var(--iris-80, #7879f1);
+  color: #fff;
+}
+
+.button[data-variant="secondary"] {
+  border: 1px solid #3e334e;
+  color: inherit;
+}
+
+.button[data-variant="primary"]:hover,
+.button[data-variant="secondary"]:hover {
+  opacity: 0.7;
+}
+
+.button[data-size="small"] {
+  padding: 12px 1em;
+  font-size: clamp(13px, 1.2vw, 1em);
+}
+
+.button[data-size="medium"] {
+  font-weight: 600;
+}
+
+.button:disabled {
+  cursor: not-allowed;
+  background-color: rgb(214, 214, 214);
+}

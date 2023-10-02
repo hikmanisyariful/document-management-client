@@ -1,0 +1,30 @@
+.appContainer {
+  display: grid;
+  grid-template-columns: auto minmax(auto, 600px);
+  justify-items: center;
+  min-height: 100vh;
+}
+
+.backgroundCover {
+  background: #7879f1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.backgroundCover .cover {
+  padding: 88px;
+  width: 50%;
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(24px);
+}
+
+.backgroundCover .cover h1,
+.backgroundCover .cover p {
+  width: 50%;
+}
+
+.backgroundCover .cover h1 span {
+  color: #fff;
+}

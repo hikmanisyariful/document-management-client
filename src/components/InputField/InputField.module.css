@@ -1,0 +1,75 @@
+.formControl {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+
+.formControl label {
+  font-weight: 600;
+}
+
+.formControl label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+
+.formControl .inputWrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.formControl .inputWrapper input[type="email"],
+.formControl .inputWrapper input[type="text"],
+.formControl .inputWrapper input[type="password"] {
+  padding: 1em;
+  outline: none;
+  border-radius: 8px;
+  border: 1px solid #afa2c3;
+}
+
+.formControl .inputWrapper input[type="email"]:focus,
+.formControl .inputWrapper input[type="text"]:focus,
+.formControl .inputWrapper input[type="password"]:focus {
+  outline: 1px solid slateblue;
+}
+
+.formControl .inputWrapper .eyeIcon {
+  position: absolute;
+  top: 0;
+  width: 40px;
+  right: 0;
+  bottom: 0;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.formControl .errorMessage {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5em;
+  font-size: 14px;
+  margin-left: 0.5em;
+}
+
+.formControl .errorMessage .warningIcon {
+  width: 18px;
+  height: 18px;
+}
+
+.formControl .errorMessage span {
+  color: burlywood !important;
+}
+
+.formControl .inputWrapper .eyeIcon .eyeOutlined {
+  width: 21px;
+  height: 21px;
+}
+
+.formControl .inputWrapper .eyeIcon .eyeOutlined:hover {
+  cursor: pointer;
+}
