@@ -4,58 +4,73 @@ import { useState } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import Button from "@/components/Button";
 import InputField from "@/components/InputField";
-import loginStyle from "./Login.module.css";
+import registerStyles from "./Register.module.css";
 import Background from "@/components/Background";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { login, selectLogin, setSession } from "@/redux/reducer/login";
 import { useRouter } from "next/navigation";
 import { FetchState } from "@/interface/Fetch";
+import Dropdwon from "@/components/Dropdown";
+import { register, selectRegister } from "@/redux/reducer/register";
 
 type FormValues = {
+  username: string;
   email: string;
   password: string;
+  roleId?: number;
 };
 
+const options = [
+  {
+    id: 1,
+    name: "User",
+  },
+  {
+    id: 2,
+    name: "SPV",
+  },
+];
+
 const defaultValues: FormValues = {
+  username: "",
   email: "",
   password: "",
 };
 
-export default function Login() {
+export default function RegisterLayout() {
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const loginData = useAppSelector(selectLogin);
+  const registerData = useAppSelector(selectRegister);
   const methods = useForm({
     mode: "onSubmit",
     defaultValues: { ...defaultValues },
   });
 
-  const { handleSubmit, reset } = methods;
+  const { handleSubmit, reset, setValue } = methods;
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const onSubmit: SubmitHandler<FormValues> = (
     data: FormValues,
     e?: React.BaseSyntheticEvent
   ) => {
-    dispatch(login(data))
+    dispatch(register(data))
       .unwrap()
       .then((res: any) => {
         reset();
-        dispatch(setSession(res.data));
-        router.push("/dashboard");
+        router.push("/login");
       });
   };
 
   return (
     <Background>
-      <div className={loginStyle.formSection}>
+      <div className={registerStyles.formSection}>
         <FormProvider {...methods}>
-          <h1>Hello</h1>
-          <p>Enter your email and password to login.</p>
+          <h1>Welcome</h1>
+          <p>Register your accout to get access.</p>
           <form
-            className={loginStyle.formWrapper}
+            className={registerStyles.formWrapper}
             onSubmit={handleSubmit(onSubmit)}
           >
+            <InputField name="username" label="Username" type="text" required />
             <InputField name="email" label="Email" type="email" required />
             <InputField
               name="password"
@@ -66,20 +81,29 @@ export default function Login() {
                 setShowPassword(e);
               }}
             />
-            <div className={loginStyle.buttonSubmit}>
+            <Dropdwon
+              name="role"
+              label="Role"
+              options={options}
+              onChange={(e) => {
+                console.log(e);
+                setValue("roleId", e.id);
+              }}
+            />
+            <div className={registerStyles.buttonSubmit}>
               <Button
                 type="submit"
                 variant="primary"
-                className={loginStyle.fullWidth}
-                loading={loginData.status === FetchState.LOADING}
+                className={registerStyles.fullWidth}
+                loading={registerData.status === FetchState.LOADING}
               >
-                Login
+                Register
               </Button>
             </div>
 
             <div className="divider">
-              <span>Do not have account? </span>
-              <Button href="/register">Register</Button>
+              <span>Do have account? </span>
+              <Button href="/login">Login</Button>
             </div>
           </form>
         </FormProvider>

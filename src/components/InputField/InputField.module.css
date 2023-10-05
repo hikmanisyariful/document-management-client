@@ -28,6 +28,7 @@
   outline: none;
   border-radius: 8px;
   border: 1px solid #afa2c3;
+  font-size: 1em;
 }
 
 .formControl .inputWrapper input[type="email"]:focus,

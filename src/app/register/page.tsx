@@ -1,5 +1,10 @@
+import RegisterLayout from "@/layouts/Register";
 import React from "react";
 
 export default function Register() {
-  return <div>Register</div>;
+  return (
+    <main>
+      <RegisterLayout />
+    </main>
+  );
 }

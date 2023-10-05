@@ -1,0 +1,91 @@
+.formControl {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+
+.formControl label {
+  font-weight: 600;
+}
+
+.formControl label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+
+.formControl .inputWrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.formControl .inputWrapper input {
+  padding: 1em;
+  outline: none;
+  border-radius: 8px;
+  border: 1px solid #afa2c3;
+  font-size: 1em;
+}
+
+.formControl .inputWrapper:hover,
+.formControl .inputWrapper input:hover,
+.formControl .inputWrapper input:focus {
+  cursor: pointer;
+}
+
+.formControl .inputWrapper input:focus {
+  outline: 1px solid slateblue;
+}
+
+.formControl .inputWrapper .iconWrapper {
+  position: absolute;
+  top: 0;
+  width: 40px;
+  right: 0;
+  bottom: 0;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.formControl .inputWrapper .iconWrapper .icon {
+  width: 21px;
+  height: 21px;
+  transition: 5ms all ease-in;
+}
+
+.formControl .inputWrapper .iconWrapper .icon[data-toggle="true"] {
+  transform: rotate(180deg);
+}
+
+.dropdown {
+  display: none;
+  position: absolute;
+  margin-top: 60px;
+  z-index: 79;
+  width: 100%;
+  background-color: #fff;
+  border: 2px solid #afa2c3;
+  border-radius: 8px;
+}
+
+.dropdown[data-open="true"] {
+  display: inline-block;
+}
+
+.options {
+  padding: 1em;
+  display: grid;
+  gap: 0.5em;
+}
+
+.option {
+  padding: 10px;
+}
+
+.option:hover {
+  background-color: #e0d8ed;
+}

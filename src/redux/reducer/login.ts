@@ -1,17 +1,26 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { FetchState } from "@/interface/Fetch";
 import { AppState } from "../store";
 import axios from "axios";
+import { Cookies } from "react-cookie";
 
 export type LoginState = {
   status: FetchState;
-  username?: string;
-  role?: string;
+  data?: {
+    username: string;
+    role: string;
+  };
 };
 
 type PayloadLogin = {
   email: string;
   password: string;
+};
+
+type ResponseLogin = {
+  access_token: string;
+  username: string;
+  role: string;
 };
 
 const initialState: LoginState = {
@@ -33,7 +42,7 @@ async function fetchLogin(body: PayloadLogin) {
 
 export const login = createAsyncThunk(
   "users/login",
-  async (data: PayloadLogin) => {
+  async (data: PayloadLogin, { rejectWithValue }) => {
     const body = {
       email: data.email,
       password: data.password,
@@ -41,17 +50,36 @@ export const login = createAsyncThunk(
 
     try {
       const response: any = await fetchLogin(body);
-      console.log("response", response);
-    } catch (error) {
-      console.log("error", error);
+      return response;
+    } catch (error: any) {
+      return rejectWithValue;
     }
   }
 );
 
-export const LoginSlice = createSlice({
+const cookie = new Cookies();
+
+export const loginSlice = createSlice({
   name: "Login",
   initialState,
-  reducers: {},
+  reducers: {
+    setSession: (state, action: PayloadAction<ResponseLogin>) => {
+      if (action.payload.access_token) {
+        cookie.set("key", action.payload.access_token);
+      }
+
+      state = {
+        ...state,
+        data: {
+          username: action.payload.username,
+          role: action.payload.role,
+        },
+      };
+    },
+    clearSession: () => {
+      cookie.remove("key");
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(login.pending, (state) => {
@@ -66,6 +94,8 @@ export const LoginSlice = createSlice({
   },
 });
 
-export const selectSignIn = (state: AppState) => state.login;
+export const { setSession, clearSession } = loginSlice.actions;
 
-export default LoginSlice.reducer;
+export const selectLogin = (state: AppState) => state.login;
+
+export default loginSlice.reducer;
