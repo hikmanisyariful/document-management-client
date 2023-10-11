@@ -86,7 +86,6 @@ export default function RegisterLayout() {
               label="Role"
               options={options}
               onChange={(e) => {
-                console.log(e);
                 setValue("roleId", e.id);
               }}
             />

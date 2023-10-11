@@ -16,6 +16,7 @@ export function makeStore() {
           extraArgument: thunkArguments,
         },
         immutableCheck: false,
+        serializableCheck: false,
       }),
   });
 

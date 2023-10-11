@@ -41,3 +41,33 @@ export const decryptString = (value: string): string => {
 
   return decrypted;
 };
+
+export const monthNames = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+
+export const formatHours = (date: Date) => {
+  let hours = date.getHours();
+  let minutes = date.getMinutes();
+  let ampm = hours >= 12 ? "PM" : "AM";
+  hours = hours % 12;
+  hours = hours ? hours : 12;
+  const formatMinutes = minutes < 10 ? "0" + minutes : minutes;
+  const strTime = hours + ":" + formatMinutes + " " + ampm;
+  return strTime;
+};
+
+export const capitalizeFirstLetter = (value: string) => {
+  return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
+};
