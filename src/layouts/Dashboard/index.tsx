@@ -1,7 +1,6 @@
 "use client";
 
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { useRouter } from "next/navigation";
 import dashboardStyle from "./Dashboard.module.css";
 import Table from "@/components/Table";
 import Button from "@/components/Button";
@@ -15,10 +14,12 @@ import { ChangeEventHandler, useEffect, useState } from "react";
 import Dialog from "@/components/Dialog";
 import { AiOutlineClose } from "react-icons/ai";
 import Header from "@/components/Header";
+import { getProfile, selectProfile } from "@/redux/reducer/profile";
 
 export default function DashboardLayout() {
   const dispatch = useAppDispatch();
   const dataDocuments = useAppSelector(selectDocuments);
+  const dataProfile = useAppSelector(selectProfile);
   const [openModal, setOpenModal] = useState(false);
 
   const handelOnChange: ChangeEventHandler<HTMLInputElement> = (e) => {
@@ -39,6 +40,17 @@ export default function DashboardLayout() {
   };
 
   useEffect(() => {
+    const promise = dispatch(getProfile());
+
+    promise.unwrap().catch((error) => {
+      console.log(error);
+    });
+    return () => {
+      promise.abort();
+    };
+  }, [dispatch]);
+
+  useEffect(() => {
     const promise = dispatch(getDocuments());
 
     promise.unwrap().catch((error) => {
@@ -57,8 +69,16 @@ export default function DashboardLayout() {
         <div className={dashboardStyle.content}>
           <div className={dashboardStyle.info}>
             <span className={dashboardStyle.welcome}>
-              Welcome <span className={dashboardStyle.username}>Username</span>
+              Welcome{" "}
+              <span className={dashboardStyle.username}>
+                {dataProfile.data?.username}
+              </span>
             </span>
+            <div>
+              <p>Role: {dataProfile.data?.role}</p>
+              <p>Email: {dataProfile.data?.email}</p>
+            </div>
+
             <span className={dashboardStyle.description}>
               Upload, Manage and Verified your document
             </span>
