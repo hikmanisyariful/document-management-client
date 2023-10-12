@@ -1,5 +1,5 @@
 import style from "./ToggleSwitch.module.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function ToggleSwitch({
   checked = false,
@@ -7,10 +7,16 @@ export default function ToggleSwitch({
   disabled = false,
 }: {
   checked: boolean;
-  onChange: (e: boolean) => Promise<boolean> | Promise<void> | void;
+  onChange: (e: boolean) => void;
   disabled?: boolean;
 }) {
   const [checkState, setCheckState] = useState(checked);
+
+  useEffect(() => {
+    if (checked) {
+      setCheckState(true);
+    }
+  }, [checked]);
 
   return (
     <div className={style.switchContainer}>
@@ -21,9 +27,7 @@ export default function ToggleSwitch({
           checked={checkState}
           onChange={({ target: { checked } }) => {
             setCheckState(checked);
-            onChange(checked)?.then((res) => {
-              if (typeof res === "boolean") setCheckState(res);
-            });
+            onChange(checked);
           }}
         />
         <span className={style.slider} aria-disabled={disabled}></span>

@@ -10,6 +10,11 @@ export type DetailDocumentState = {
   data?: Document;
 };
 
+type PayloadUpdate = {
+  id?: number;
+  status?: string;
+};
+
 const initialState: DetailDocumentState = {
   status: FetchState.IDLE,
 };
@@ -41,6 +46,22 @@ async function fetchDeleteDocument(id: string) {
   return response;
 }
 
+async function fetchUpdateStatus(data: PayloadUpdate) {
+  const body = {
+    status: data.status,
+  };
+  const response = await axios.put(
+    `${process.env.NEXT_PUBLIC_API}/documents/${data.id}`,
+    body,
+    {
+      headers: {
+        access_token: cookie.get("key"),
+      },
+    }
+  );
+  return response;
+}
+
 export const getDetailDocument = createAsyncThunk(
   "document/detail",
   async (id: string, { rejectWithValue, signal }) => {
@@ -61,6 +82,18 @@ export const deleteDocument = createAsyncThunk(
       return response;
     } catch (error) {
       return rejectWithValue(error);
+    }
+  }
+);
+
+export const updateStatusDocument = createAsyncThunk(
+  "document/updateStatus",
+  async (data: PayloadUpdate, { rejectWithValue }) => {
+    try {
+      const response: any = await fetchUpdateStatus(data);
+      return response.data.data;
+    } catch (error) {
+      rejectWithValue(error);
     }
   }
 );
@@ -97,6 +130,19 @@ export const DetailDocumentSlice = createSlice({
         state.data = undefined;
       })
       .addCase(deleteDocument.rejected, (state) => {
+        state.status = FetchState.FAILED;
+      })
+      .addCase(updateStatusDocument.pending, (state) => {
+        state.status = FetchState.LOADING;
+      })
+      .addCase(
+        updateStatusDocument.fulfilled,
+        (state, action: PayloadAction<Document>) => {
+          state.status = FetchState.IDLE;
+          state.data = action.payload;
+        }
+      )
+      .addCase(updateStatusDocument.rejected, (state) => {
         state.status = FetchState.FAILED;
       });
   },

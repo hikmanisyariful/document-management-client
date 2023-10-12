@@ -10,13 +10,27 @@ import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import {
   deleteDocument,
   getDetailDocument,
+  resetData,
   selectDetailDocument,
+  updateStatusDocument,
 } from "@/redux/reducer/detailDocument";
 import { FetchState } from "@/interface/Fetch";
 import { formatDate } from "@/utils/helpers";
 import { BsTrashFill } from "react-icons/bs";
 import Dialog from "@/components/Dialog";
 import Notification from "@/components/Notification";
+import Dropdwon from "@/components/Dropdown";
+
+const options = [
+  {
+    id: 1,
+    name: "APPROVED",
+  },
+  {
+    id: 2,
+    name: "REJECTED",
+  },
+];
 
 export default function DocumentDetailLayout({
   documentId,
@@ -29,6 +43,12 @@ export default function DocumentDetailLayout({
   const dataDetailDocument = useAppSelector(selectDetailDocument);
   const [openModal, setOpenModal] = useState(false);
   const [openNotification, setOpenNotification] = useState(false);
+  const [statusVerification, setStatusVerification] = useState<
+    string | undefined
+  >();
+  const [finalVerication, setFinalVerification] = useState<
+    string | undefined
+  >();
 
   useEffect(() => {
     const promise = dispatch(getDetailDocument(documentId));
@@ -40,6 +60,22 @@ export default function DocumentDetailLayout({
       promise.abort();
     };
   }, [dispatch, documentId]);
+
+  useEffect(() => {
+    if (!dataDetailDocument.data) return;
+    if (dataDetailDocument.data.status !== "SUBMITTED") {
+      setIsReview(true);
+      if (dataDetailDocument.data.status !== "REVIEW") {
+        setFinalVerification(dataDetailDocument.data.status);
+      }
+    }
+  }, [dataDetailDocument.data]);
+
+  useEffect(() => {
+    return () => {
+      dispatch(resetData());
+    };
+  }, [dispatch]);
 
   return (
     <div className={style.container}>
@@ -75,7 +111,7 @@ export default function DocumentDetailLayout({
             </div>
 
             <div className={style.controlDocument}>
-              <div className={style.title}>Document Control</div>
+              <div className={style.title}>Summary</div>
               <div className={style.detailWrapper}>
                 <div className={style.detail}>
                   <span className={style.titleName}>File ID</span>
@@ -109,12 +145,66 @@ export default function DocumentDetailLayout({
                     checked={isReview}
                     onChange={(e) => {
                       setIsReview(e);
+                      const payload = {
+                        id: dataDetailDocument.data?.id,
+                        status: "REVIEW",
+                      };
+                      dispatch(updateStatusDocument(payload))
+                        .unwrap()
+                        .catch((error) => {
+                          console.log(error);
+                        });
                     }}
                     disabled={isReview}
                   />
-                  {isReview && <span>On review progress</span>}
+                  {isReview && (
+                    <span>
+                      {finalVerication && isReview
+                        ? "Has reviewed"
+                        : isReview && "On review progress"}
+                    </span>
+                  )}
                 </div>
               </div>
+              {isReview && (
+                <div>
+                  <p></p>
+                  <Dropdwon
+                    name="role"
+                    disabled={finalVerication ? true : false}
+                    initialValue={
+                      finalVerication
+                        ? { id: 1, name: finalVerication }
+                        : undefined
+                    }
+                    label="Verification"
+                    options={options}
+                    onChange={(e) => {
+                      console.log(e);
+                      setStatusVerification(e.name.toUpperCase());
+                    }}
+                  />
+                  <Button
+                    style={{ width: "100%", marginTop: "2em" }}
+                    disabled={
+                      !statusVerification || finalVerication ? true : false
+                    }
+                    onClick={() => {
+                      const payload = {
+                        id: dataDetailDocument.data?.id,
+                        status: statusVerification,
+                      };
+                      dispatch(updateStatusDocument(payload))
+                        .unwrap()
+                        .catch((error) => {
+                          console.log(error);
+                        });
+                    }}
+                  >
+                    {finalVerication ? "Final Summary" : "Submit"}
+                  </Button>
+                </div>
+              )}
             </div>
           </div>
         </div>
