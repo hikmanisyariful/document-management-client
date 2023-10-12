@@ -5,6 +5,8 @@ import { Document } from "@/redux/reducer/document";
 import { capitalizeFirstLetter, formatDate } from "@/utils/helpers";
 import { useRouter } from "next/navigation";
 import { FaTrashRestoreAlt } from "react-icons/fa";
+import { useAppSelector } from "@/redux/hooks";
+import { selectProfile } from "@/redux/reducer/profile";
 
 export default function Table({ data }: { data: Document[] }) {
   const [optionActive, setOptionActive] = useState<number | undefined>();
@@ -95,6 +97,7 @@ const ActionComponent = ({
   documentId: number;
 }) => {
   const router = useRouter();
+  const dataProfile = useAppSelector(selectProfile);
   const actionRef = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
 
@@ -122,13 +125,15 @@ const ActionComponent = ({
           data-open={open}
         >
           <div className={tableStyle.actionOptions}>
-            <div
-              className={tableStyle.actionOption}
-              onClick={() => router.push(`/document/${documentId}`)}
-            >
-              View
-            </div>
-            <div className={tableStyle.actionOption}>Edit</div>
+            <div className={tableStyle.actionOption}>View</div>
+            {dataProfile.data?.role === "SPV" && (
+              <div
+                className={tableStyle.actionOption}
+                onClick={() => router.push(`/document/${documentId}`)}
+              >
+                Edit
+              </div>
+            )}
           </div>
         </div>
       </div>
