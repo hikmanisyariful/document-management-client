@@ -9,6 +9,7 @@
   border-collapse: collapse;
   font-size: 14px;
   border-radius: 8px;
+  width: 100%;
 }
 
 .table thead {
@@ -182,4 +183,31 @@
 
 .actionOptions .actionOption:hover {
   background-color: aliceblue;
+}
+
+.emptyContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1em;
+  margin-top: 2em;
+  padding-bottom: 2em;
+}
+
+.emptyContainer .emptyIcon {
+  width: 64px;
+  height: 64px;
+  position: relative;
+}
+
+.emptyContainer .emptyTitle {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.emptyContainer p {
+  font-size: 14px;
+  opacity: 0.6;
 }

@@ -19,8 +19,9 @@
 }
 
 .button[data-variant="secondary"] {
-  border: 1px solid #3e334e;
+  /* border: 1px solid #3e334e; */
   color: inherit;
+  background-color: rgb(203 213 225);
 }
 
 .button[data-variant="primary"]:hover,

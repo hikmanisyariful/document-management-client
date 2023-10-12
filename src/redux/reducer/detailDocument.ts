@@ -29,14 +29,38 @@ async function fetchDetailDocument(id: string, signal?: AbortSignal) {
   return response;
 }
 
+async function fetchDeleteDocument(id: string) {
+  const response = await axios.delete(
+    `${process.env.NEXT_PUBLIC_API}/documents/${id}`,
+    {
+      headers: {
+        access_token: cookie.get("key"),
+      },
+    }
+  );
+  return response;
+}
+
 export const getDetailDocument = createAsyncThunk(
-  "users/register",
+  "document/detail",
   async (id: string, { rejectWithValue, signal }) => {
     try {
       const response: any = await fetchDetailDocument(id, signal);
       return response.data.data;
     } catch (error: any) {
-      return rejectWithValue;
+      return rejectWithValue(error);
+    }
+  }
+);
+
+export const deleteDocument = createAsyncThunk(
+  "document/delete",
+  async (id: string, { rejectWithValue }) => {
+    try {
+      const response: any = await fetchDeleteDocument(id);
+      return response;
+    } catch (error) {
+      return rejectWithValue(error);
     }
   }
 );
@@ -44,7 +68,12 @@ export const getDetailDocument = createAsyncThunk(
 export const DetailDocumentSlice = createSlice({
   name: "DetailDocument",
   initialState,
-  reducers: {},
+  reducers: {
+    resetData: (state) => {
+      if (!state.data) return;
+      state.data = undefined;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getDetailDocument.pending, (state) => {
@@ -59,11 +88,21 @@ export const DetailDocumentSlice = createSlice({
       )
       .addCase(getDetailDocument.rejected, (state) => {
         state.status = FetchState.FAILED;
+      })
+      .addCase(deleteDocument.pending, (state) => {
+        state.status = FetchState.LOADING;
+      })
+      .addCase(deleteDocument.fulfilled, (state) => {
+        state.status = FetchState.IDLE;
+        state.data = undefined;
+      })
+      .addCase(deleteDocument.rejected, (state) => {
+        state.status = FetchState.FAILED;
       });
   },
 });
 
-export const {} = DetailDocumentSlice.actions;
+export const { resetData } = DetailDocumentSlice.actions;
 
 export const selectDetailDocument = (state: AppState) => state.detailDocument;
 

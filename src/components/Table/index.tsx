@@ -4,6 +4,7 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import { Document } from "@/redux/reducer/document";
 import { capitalizeFirstLetter, formatDate } from "@/utils/helpers";
 import { useRouter } from "next/navigation";
+import { FaTrashRestoreAlt } from "react-icons/fa";
 
 export default function Table({ data }: { data: Document[] }) {
   const [optionActive, setOptionActive] = useState<number | undefined>();
@@ -28,37 +29,56 @@ export default function Table({ data }: { data: Document[] }) {
           </tr>
         </thead>
         <tbody>
-          {data.map((document, index) => {
-            const date = new Date(document.createdAt);
-            const strDate = formatDate(date);
+          {data.length > 0 &&
+            data.map((document, index) => {
+              const date = new Date(document.createdAt);
+              const strDate = formatDate(date);
 
-            return (
-              <tr key={`${document.id}-${index}`}>
-                <td className={tableStyle.date}>{strDate}</td>
-                <td>{document.fileName}</td>
-                <td>{document.User.username}</td>
-                <td>
-                  <span
-                    className={tableStyle.status}
-                    data-value={document.status}
-                    // data-value="APPROVED"
-                  >
-                    {capitalizeFirstLetter(document.status)}
-                  </span>
-                </td>
-                <td>
-                  <ActionComponent
-                    onClick={() => setOptionActive(document.id)}
-                    isActive={optionActive === document.id}
-                    name={`${document.id}-${document.fileId}`}
-                    documentId={document.id}
-                  />
-                </td>
-              </tr>
-            );
-          })}
+              return (
+                <tr key={`${document.id}-${index}`}>
+                  <td className={tableStyle.date}>{strDate}</td>
+                  <td>{document.fileName}</td>
+                  <td>{document.User.username}</td>
+                  <td>
+                    <span
+                      className={tableStyle.status}
+                      data-value={document.status}
+                      // data-value="APPROVED"
+                    >
+                      {capitalizeFirstLetter(document.status)}
+                    </span>
+                  </td>
+                  <td>
+                    <ActionComponent
+                      onClick={() => setOptionActive(document.id)}
+                      isActive={optionActive === document.id}
+                      name={`${document.id}-${document.fileId}`}
+                      documentId={document.id}
+                    />
+                  </td>
+                </tr>
+              );
+            })}
         </tbody>
       </table>
+      {data.length === 0 && (
+        <div className={tableStyle.emptyContainer}>
+          <div className={tableStyle.emptyIcon}>
+            <FaTrashRestoreAlt
+              style={{
+                width: "100%",
+                height: "100%",
+                color: "rgb(125 211 252)",
+              }}
+            />
+          </div>
+          <div className={tableStyle.emptyTitle}>No uploaded file.</div>
+          <p>
+            Please upload pdf file, with maximun size is 1mb. Status consists of
+            Submitted, Review, Approved, Rejected
+          </p>
+        </div>
+      )}
     </div>
   );
 }
@@ -109,7 +129,6 @@ const ActionComponent = ({
               View
             </div>
             <div className={tableStyle.actionOption}>Edit</div>
-            <div className={tableStyle.actionOption}>Delete</div>
           </div>
         </div>
       </div>

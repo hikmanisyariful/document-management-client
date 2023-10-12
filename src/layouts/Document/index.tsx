@@ -8,11 +8,15 @@ import { useRouter } from "next/navigation";
 import ToggleSwitch from "@/components/ToggleSwitch";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import {
+  deleteDocument,
   getDetailDocument,
   selectDetailDocument,
 } from "@/redux/reducer/detailDocument";
 import { FetchState } from "@/interface/Fetch";
 import { formatDate } from "@/utils/helpers";
+import { BsTrashFill } from "react-icons/bs";
+import Dialog from "@/components/Dialog";
+import Notification from "@/components/Notification";
 
 export default function DocumentDetailLayout({
   documentId,
@@ -23,6 +27,8 @@ export default function DocumentDetailLayout({
   const router = useRouter();
   const [isReview, setIsReview] = useState(false);
   const dataDetailDocument = useAppSelector(selectDetailDocument);
+  const [openModal, setOpenModal] = useState(false);
+  const [openNotification, setOpenNotification] = useState(false);
 
   useEffect(() => {
     const promise = dispatch(getDetailDocument(documentId));
@@ -50,10 +56,31 @@ export default function DocumentDetailLayout({
             />
           </div>
           <div className={style.control}>
-            <Button onClick={() => router.push("/dashboard")}>Back</Button>
+            <div className={style.actionWrapper}>
+              <Button
+                variant="secondary"
+                onClick={() => router.push("/dashboard")}
+              >
+                <span>Back</span>
+              </Button>
+              <div
+                className={style.deleteIcon}
+                onClick={() => {
+                  setOpenModal(true);
+                }}
+              >
+                <BsTrashFill style={{ width: "40%", height: "40%" }} />
+                <span>Delete</span>
+              </div>
+            </div>
+
             <div className={style.controlDocument}>
               <div className={style.title}>Document Control</div>
               <div className={style.detailWrapper}>
+                <div className={style.detail}>
+                  <span className={style.titleName}>File ID</span>
+                  <span>{dataDetailDocument.data?.fileId}</span>
+                </div>
                 <div className={style.detail}>
                   <span className={style.titleName}>File name</span>
                   <span>{dataDetailDocument.data?.fileName}</span>
@@ -92,6 +119,67 @@ export default function DocumentDetailLayout({
           </div>
         </div>
       )}
+
+      <Dialog
+        open={openModal}
+        onClose={() => {
+          setOpenModal(false);
+        }}
+      >
+        <div className={style.modalConfirmation}>
+          <p className={style.title}>Confirm Delete</p>
+          <p>
+            You are able to delete the document. It be deleted permanently. Are
+            you sure to delete this?
+          </p>
+          <div className={style.modalActions}>
+            <Button
+              variant="secondary"
+              size="small"
+              onClick={() => {
+                setOpenModal(false);
+              }}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="primary"
+              size="small"
+              loading={
+                openNotification ||
+                dataDetailDocument.status === FetchState.LOADING
+              }
+              disabled={
+                openNotification ||
+                dataDetailDocument.status === FetchState.LOADING
+              }
+              onClick={() => {
+                dispatch(deleteDocument(documentId))
+                  .unwrap()
+                  .then(() => {
+                    setOpenNotification(true);
+
+                    setTimeout(() => {
+                      setOpenNotification(false);
+                      setOpenModal(false);
+                      router.push("/dashboard");
+                    }, 3000);
+                  })
+                  .catch((error) => {
+                    console.log(error);
+                  });
+              }}
+            >
+              Yes, I am sure.
+            </Button>
+          </div>
+        </div>
+      </Dialog>
+      <Notification open={openNotification}>
+        <div className={style.successNotif}>
+          Deleted document is successfully.
+        </div>
+      </Notification>
     </div>
   );
 }

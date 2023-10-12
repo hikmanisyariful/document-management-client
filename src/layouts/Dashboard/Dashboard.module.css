@@ -1,5 +1,6 @@
 .container {
-  display: grid;
+  display: flex;
+  flex-direction: column;
   gap: 2em;
   background-color: #f2f3fa;
   padding-bottom: 5em;
@@ -24,6 +25,7 @@
 .content {
   margin: 0 3em 3em 3em;
   display: flex;
+  align-self: flex-start;
   gap: 2.5em;
 }
 

@@ -1,0 +1,7 @@
+.notification {
+  position: absolute;
+  z-index: 99;
+  right: 0;
+  top: 50px;
+  margin: 2em;
+}
