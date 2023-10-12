@@ -1,0 +1,84 @@
+.container {
+  display: grid;
+  gap: 2em;
+  background-color: #f2f3fa;
+  padding-bottom: 5em;
+  min-height: 100vh;
+  align-content: flex-start;
+}
+
+.section {
+  display: grid;
+  grid-template-columns: 60% 40%;
+  justify-items: center;
+  padding: 2em;
+}
+
+.documentWrapper {
+  width: 100%;
+  height: 700px;
+}
+
+.control {
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2em;
+}
+
+.controlDocument {
+  background-color: #fff;
+  border-radius: 8px;
+  width: 80%;
+  /* height: 400px; */
+  padding: 2em;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+
+.controlDocument .title {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.controlDocument .detailWrapper {
+  display: grid;
+  gap: 0.5em;
+}
+
+.controlDocument .detail {
+  display: grid;
+  grid-template-columns: 30% 70%;
+  color: #62666a;
+}
+
+.controlDocument .detail .titleName {
+  opacity: 0.6;
+}
+
+.reviewControl {
+  display: flex;
+  margin-top: 1em;
+  align-items: center;
+}
+
+.reviewControl .switchTitle {
+  width: 30%;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.statusReview {
+  display: flex;
+  justify-content: flex-start;
+  width: 70%;
+  gap: 1em;
+  align-items: center;
+}
+
+.statusReview span {
+  font-size: 14px;
+  color: #62666a;
+}

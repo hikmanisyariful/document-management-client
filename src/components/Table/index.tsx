@@ -2,11 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 import tableStyle from "./Table.module.css";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { Document } from "@/redux/reducer/document";
-import {
-  capitalizeFirstLetter,
-  formatHours,
-  monthNames,
-} from "@/utils/helpers";
+import { capitalizeFirstLetter, formatDate } from "@/utils/helpers";
+import { useRouter } from "next/navigation";
 
 export default function Table({ data }: { data: Document[] }) {
   const [optionActive, setOptionActive] = useState<number | undefined>();
@@ -33,12 +30,7 @@ export default function Table({ data }: { data: Document[] }) {
         <tbody>
           {data.map((document, index) => {
             const date = new Date(document.createdAt);
-            const strDate = `${date.getDate()} ${monthNames[
-              date.getMonth()
-            ].slice(0, 3)} ${date
-              .getFullYear()
-              .toString()
-              .slice(-2)} - ${formatHours(date)}`;
+            const strDate = formatDate(date);
 
             return (
               <tr key={`${document.id}-${index}`}>
@@ -59,6 +51,7 @@ export default function Table({ data }: { data: Document[] }) {
                     onClick={() => setOptionActive(document.id)}
                     isActive={optionActive === document.id}
                     name={`${document.id}-${document.fileId}`}
+                    documentId={document.id}
                   />
                 </td>
               </tr>
@@ -74,11 +67,14 @@ const ActionComponent = ({
   onClick,
   isActive,
   name,
+  documentId,
 }: {
   onClick: VoidFunction;
   isActive: boolean;
   name: string;
+  documentId: number;
 }) => {
+  const router = useRouter();
   const actionRef = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
 
@@ -106,7 +102,12 @@ const ActionComponent = ({
           data-open={open}
         >
           <div className={tableStyle.actionOptions}>
-            <div className={tableStyle.actionOption}>View</div>
+            <div
+              className={tableStyle.actionOption}
+              onClick={() => router.push(`/document/${documentId}`)}
+            >
+              View
+            </div>
             <div className={tableStyle.actionOption}>Edit</div>
             <div className={tableStyle.actionOption}>Delete</div>
           </div>

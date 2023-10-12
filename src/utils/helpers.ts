@@ -71,3 +71,10 @@ export const formatHours = (date: Date) => {
 export const capitalizeFirstLetter = (value: string) => {
   return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
 };
+
+export const formatDate = (date: Date) => {
+  return `${date.getDate()} ${monthNames[date.getMonth()].slice(0, 3)} ${date
+    .getFullYear()
+    .toString()
+    .slice(-2)} - ${formatHours(date)}`;
+};

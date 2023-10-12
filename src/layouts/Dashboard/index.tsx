@@ -1,7 +1,6 @@
 "use client";
 
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { clearSession } from "@/redux/reducer/login";
 import { useRouter } from "next/navigation";
 import dashboardStyle from "./Dashboard.module.css";
 import Table from "@/components/Table";
@@ -15,10 +14,10 @@ import {
 import { ChangeEventHandler, useEffect, useState } from "react";
 import Dialog from "@/components/Dialog";
 import { AiOutlineClose } from "react-icons/ai";
+import Header from "@/components/Header";
 
 export default function DashboardLayout() {
   const dispatch = useAppDispatch();
-  const router = useRouter();
   const dataDocuments = useAppSelector(selectDocuments);
   const [openModal, setOpenModal] = useState(false);
 
@@ -53,18 +52,7 @@ export default function DashboardLayout() {
   return (
     <>
       <div className={dashboardStyle.container}>
-        <div className={dashboardStyle.header}>
-          <h1 className={dashboardStyle.title}>Title</h1>
-          <Button
-            size="small"
-            onClick={() => {
-              dispatch(clearSession());
-              router.push("/login");
-            }}
-          >
-            Logout
-          </Button>
-        </div>
+        <Header />
 
         <div className={dashboardStyle.content}>
           <div className={dashboardStyle.info}>

@@ -28,9 +28,22 @@ export async function middleware(request: NextRequest) {
     }
   }
 
+  if (request.nextUrl.pathname.startsWith("/document")) {
+    if (!request.cookies.get("key")) {
+      return NextResponse.redirect(new URL("/login", request.url));
+    }
+  }
+
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/", "/login", "/register", "/dashboard"],
+  matcher: [
+    "/",
+    "/login",
+    "/register",
+    "/dashboard",
+    "/document",
+    "/document/:path*",
+  ],
 };
