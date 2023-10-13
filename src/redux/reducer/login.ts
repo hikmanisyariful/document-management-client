@@ -35,6 +35,7 @@ async function fetchLogin(body: PayloadLogin) {
       headers: {
         Accept: "application/json",
       },
+      withCredentials: false,
     }
   );
   return response;
@@ -52,7 +53,7 @@ export const login = createAsyncThunk(
       const response: any = await fetchLogin(body);
       return response;
     } catch (error: any) {
-      return rejectWithValue;
+      return rejectWithValue(error);
     }
   }
 );

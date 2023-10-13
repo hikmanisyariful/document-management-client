@@ -26,6 +26,7 @@ async function fetchRegister(body: PayloadRegister) {
       headers: {
         Accept: "application/json",
       },
+      withCredentials: false,
     }
   );
   return response;
@@ -45,7 +46,7 @@ export const register = createAsyncThunk(
       const response: any = await fetchRegister(body);
       return response;
     } catch (error: any) {
-      return rejectWithValue;
+      return rejectWithValue(error.response);
     }
   }
 );

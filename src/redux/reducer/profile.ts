@@ -26,19 +26,20 @@ async function fetchProfile(signal?: AbortSignal) {
     headers: {
       access_token: cookie.get("key"),
     },
+    withCredentials: false,
     signal,
   });
   return response;
 }
 
 export const getProfile = createAsyncThunk(
-  "users/register",
+  "users/profile",
   async (_, { rejectWithValue, signal }) => {
     try {
       const response: any = await fetchProfile(signal);
       return response.data.data;
     } catch (error: any) {
-      return rejectWithValue;
+      return rejectWithValue(error);
     }
   }
 );
@@ -47,7 +48,7 @@ export const profileSlice = createSlice({
   name: "Profile",
   initialState,
   reducers: {
-    resetProfile: (state) => initialState,
+    resetProfile: () => initialState,
   },
   extraReducers: (builder) => {
     builder

@@ -34,6 +34,7 @@ const defaultValues: FormValues = {
   username: "",
   email: "",
   password: "",
+  roleId: 1,
 };
 
 export default function RegisterLayout() {
@@ -82,6 +83,7 @@ export default function RegisterLayout() {
               }}
             />
             <Dropdwon
+              initialValue={{ id: 1, name: "User" }}
               name="role"
               label="Role"
               options={options}
@@ -101,7 +103,7 @@ export default function RegisterLayout() {
             </div>
 
             <div className="divider">
-              <span>Do have account? </span>
+              <span>Do have account?</span>
               <Button href="/login">Login</Button>
             </div>
           </form>

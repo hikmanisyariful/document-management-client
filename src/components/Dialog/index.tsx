@@ -9,15 +9,18 @@ export default function Dialog({
   open = false,
   dismiss = true,
   onClose,
+  disabled,
 }: {
   children: ReactNode;
   open?: boolean;
   dismiss?: boolean;
   onClose: () => void;
+  disabled?: boolean;
 }) {
   const dialogId = useId();
 
   useEffect(() => {
+    if (disabled) return;
     const handleClose = (e: any) => {
       const id: string = e.target.id;
       if (id === dialogId && dismiss) {
@@ -29,7 +32,7 @@ export default function Dialog({
     return () => {
       window.removeEventListener("click", handleClose);
     };
-  }, [dialogId, dismiss, onClose]);
+  }, [dialogId, disabled, dismiss, onClose]);
 
   if (!open) return <></>;
 

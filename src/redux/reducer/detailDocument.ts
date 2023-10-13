@@ -28,6 +28,7 @@ async function fetchDetailDocument(id: string, signal?: AbortSignal) {
       headers: {
         access_token: cookie.get("key"),
       },
+      withCredentials: false,
       signal,
     }
   );
@@ -41,6 +42,7 @@ async function fetchDeleteDocument(id: string) {
       headers: {
         access_token: cookie.get("key"),
       },
+      withCredentials: false,
     }
   );
   return response;
@@ -57,6 +59,7 @@ async function fetchUpdateStatus(data: PayloadUpdate) {
       headers: {
         access_token: cookie.get("key"),
       },
+      withCredentials: false,
     }
   );
   return response;

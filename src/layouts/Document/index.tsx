@@ -215,6 +215,9 @@ export default function DocumentDetailLayout({
         onClose={() => {
           setOpenModal(false);
         }}
+        disabled={
+          openNotification || dataDetailDocument.status === FetchState.LOADING
+        }
       >
         <div className={style.modalConfirmation}>
           <p className={style.title}>Confirm Delete</p>
@@ -229,6 +232,14 @@ export default function DocumentDetailLayout({
               onClick={() => {
                 setOpenModal(false);
               }}
+              loading={
+                openNotification ||
+                dataDetailDocument.status === FetchState.LOADING
+              }
+              disabled={
+                openNotification ||
+                dataDetailDocument.status === FetchState.LOADING
+              }
             >
               Cancel
             </Button>

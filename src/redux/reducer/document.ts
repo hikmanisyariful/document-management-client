@@ -45,6 +45,7 @@ async function fetchUploadFile(file: File) {
         access_token: cookie.get("key"),
         "Content-Type": "multipart/form-data",
       },
+      withCredentials: false,
     }
   );
   return response;
@@ -55,6 +56,7 @@ async function fetchDocuments(signal?: AbortSignal) {
     headers: {
       access_token: cookie.get("key"),
     },
+    withCredentials: false,
     signal,
   });
   return response;
